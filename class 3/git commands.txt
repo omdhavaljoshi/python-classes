@@ -1,2 +1,4 @@
 git add .
 git commit -m "about git coomands"
+
+git push
