@@ -1,3 +1,3 @@
 git add .
-git commit -m "about git coomands"
+git commit -m "about git comands"
 git push
