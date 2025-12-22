@@ -19,7 +19,7 @@ class Student:
             grade = "A"
         elif self.calculate_average() >= 75:
             grade = "B"
-        elif self.calculate_average() >= 60:
+        elif self.calculate_average() >= 60: 
             grade = "C"
         elif self.calculate_average() >= 40:
             grade = "D"
