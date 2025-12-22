@@ -11,7 +11,7 @@ class Student:
         return total_marks
 
     def calculate_average(self):
-        average = (self.math+self.science+self.computer)/2
+        average = (self.math+self.science+self.computer)//3
         return average
 
     def calculate_grade(self):
@@ -32,7 +32,7 @@ class Student:
     ---------------------------------------------
             Student Name: {self.name}
             Student Id: {self.student_id}
-            Total Marks: {self.calculate_total()}/100
+            Total Marks: {self.calculate_total()}/300
             Average Marks: {self.calculate_average()}/100
             Grade: {self.calculate_grade()}
     ---------------------------------------------
@@ -40,7 +40,7 @@ class Student:
         
 om = Student("Om Joshi", 43275635, 87,92,93)
 
-print(f"Total Marks: {om.calculate_total()}/100")
+print(f"Total Marks: {om.calculate_total()}/300")
 print(f"Average Marks: {om.calculate_average()}/100")
 print(f"Grade: {om.calculate_grade()}")
 om.display_report()
