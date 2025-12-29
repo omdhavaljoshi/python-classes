@@ -10,20 +10,46 @@ class Book:
         """)
 
 class Ebook(Book):
-    def __init__(self,title,author):
+    def __init__(self,title,author,downloadable):
         super.__init__(title,author)
-
+        self.downloadable = downloadable
     def download(self):
-        print(f"""
-        {self.title} = 100MB
-        """)
+        if self.downloadable == "yes":
+            print(f"{self.title} is downloadable.")
+
+        else:
+            print(f"{self.title} is not downloadable.")
 
 class Audio_book(Book):
-    def __init__(self,title,author):
+    def __init__(self,title,author,samples):
         super.__init__(title,author)
-    def samples(self):
+        self.samples = samples
+
+    def sample(self):
+        if self.samples == "yes":
+            print(f"{self.title} has audio samples.")
+
+        else:
+            print(f"{self.title} doesn't have audio samples.")
+
+class Library:
+    def __init__(self,name):
+        self.name = name
+        self.bookList = []
         print(f"""
-        Sample 1 = {self.title}.WAV
-        Sample 2 = {self.title}.WAV
-        Sample 3 = {self.title}.WAV
+           A library object is created with an empty Book List
         """)
+    def add_book(self,book):
+        self.bookList.append(book)
+        print(f"""
+          {book.title} written by {book.author} is added in the {self.name}
+        """)
+    def removeBook(self,title):
+        index = self.bookList.index(title)
+        self.bookList.pop(index)
+    def showAllBook(self):
+        pass
+sunlight = Library("Sunrise Digital Library")
+myExpWithTruth = Book("My Experiment With Truth","Mahatma Gandhi")
+sunlight.add_book(myExpWithTruth)
+sunlight.removeBook("My Experiment With Truth")
