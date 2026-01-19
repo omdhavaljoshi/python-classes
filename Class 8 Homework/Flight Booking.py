@@ -21,7 +21,12 @@ class Flight:
         pass
     
     def display_flight_info(self):
-        pass
+        print(f"""
+Flight Number: {self.flight_num}
+Flight Destination: {self.destination}
+Seats Available: {self.seats_available}
+Base Ticket Price: {self.base_price}
+""")
 
 class Domestic_flight(Flight):
     def __init__(self,flight_num,destination,seats,base_price):
