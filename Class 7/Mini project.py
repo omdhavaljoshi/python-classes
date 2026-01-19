@@ -45,11 +45,13 @@ class Library:
           {book.title} written by {book.author} is added in the {self.name}
         """)
     def removeBook(self,title):
-        index = self.bookList.index(title)
-        self.bookList.pop(index)
+        # index = self.bookList.index(title)
+        self.bookList.remove(title)
     def showAllBook(self):
-        pass
+        for i in range(len(self.bookList)):
+            print(f"{i}. {self.bookList[i]}")
 sunlight = Library("Sunrise Digital Library")
 myExpWithTruth = Book("My Experiment With Truth","Mahatma Gandhi")
 sunlight.add_book(myExpWithTruth)
 sunlight.removeBook("My Experiment With Truth")
+sunlight.showAllBook()
