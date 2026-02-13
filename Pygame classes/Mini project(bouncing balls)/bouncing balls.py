@@ -45,6 +45,7 @@ while running:
         if e.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             ball_group.add(Ball(mouse_pos))
+            ball_group.update()
 
 
     screen.fill("light blue")
