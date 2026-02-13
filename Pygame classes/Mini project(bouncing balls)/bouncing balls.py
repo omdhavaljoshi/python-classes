@@ -18,8 +18,8 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.image.load(self.ball)
         self.image = pygame.transform.scale(self.image,(50,50))
         self.rect = self.image.get_rect(center = pos)
-        self.speedX = random.randint(-5,5)
-        self.speedY = random.randint(-5,5)
+        self.speedX = random.choice([-5,-4,-3,-3,-1,1,2,3,4,5])
+        self.speedY = random.choice([-5,-4,-3,-3,-1,1,2,3,4,5])
     def update(self):
         self.rect.x += self.speedX
         self.rect.y += self.speedY
