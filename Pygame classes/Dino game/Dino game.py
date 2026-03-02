@@ -1,5 +1,8 @@
 import pygame
 pygame.init()
+pygame.mixer.music.load(r"Pygame classes/Dino game/dino music.mp3")
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 
 # Background Images -->
 bg = pygame.image.load(r"Pygame classes/Class 1/bg (1).png")
@@ -19,27 +22,96 @@ dinoX = 100
 class Dino(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.images = []
+        self.run_image = []
+        self.idle_image = []
+        self.jump_image = []
+        self.dead_image = []
+        self.load_images()
         self.index = 0
-        for i in range(1,9):
-            self.image = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Coding/Python coding class/Pygame classes/Dino game/Run "+f"({i}).png")
-            self.image = pygame.transform.scale(self.image,(160,160))
-            self.images.append(self.image)
-        self.image = self.images[0]
+        self.image = self.idle_image[0]
         self.rect = self.image.get_rect(center = (dinoX,dinoY))
         self.counter = 0
+        self.dino_state = "idle"
+        self.dino_on_ground = True
+        self.dino_velociy_y = 0
+        self.dino_gravity = 1
+        self.jump_power = -5
     
-    def run(self):
+    def load_images(self):
+        for i in range(1,9):
+            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Run "+f"({i}).png")
+            self.image = pygame.transform.scale(self.image,(160,160))
+            self.run_image.append(self.image)
+
+        for i in range(1,11):
+            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Idle "+f"({i}).png")
+            self.image = pygame.transform.scale(self.image,(160,160))
+            self.idle_image.append(self.image)
+
+        for i in range(1,13):
+            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Jump "+f"({i}).png")
+            self.image = pygame.transform.scale(self.image,(160,160))
+            self.jump_image.append(self.image)
+        
+        for i in range(1,9):
+            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Dead "+f"({i}).png")
+            self.image = pygame.transform.scale(self.image,(160,160))
+            self.dead_image.append(self.image)
+    
+    def track_counter(self):
         self.counter+=1
         if self.counter >= 8:
             self.counter = 0
             self.index += 1
-            if self.index > len(self.images)-1:
+
+    def run(self):
+            self.track_counter()
+            if self.index > len(self.run_image)-1:
                 self.index = 0
-            self.image = self.images[self.index]
+            self.image = self.run_image[self.index]
+
+    def idle_(self):
+        self.track_counter()
+        if self.index > len(self.idle_image)-1:
+            self.index = 0
+        self.image = self.idle_image[self.index]
+    
+    def gravity_handle(self):
+        self.dino_velociy_y += self.dino_gravity
+        self.rect.y += self.dino_velociy_y
+        self.dino_on_ground == True
+
+    def jump(self):
+        if self.dino_on_ground == True:
+            self.dino_velociy_y = self.jump_power
+            self.dino_on_ground = False
+        self.track_counter()
+        if self.index > len(self.jump_image)-1:
+            self.index = 0
+        if self.index >= len(self.jump_image)-1:
+            self.dino_state = "run"
+        self.image = self.jump_image[self.index]
+        # self.rect.y += self.jump_power
+    
+    def death(self):
+        self.track_counter()
+        if self.index > len(self.dead_image)-1:
+            self.index = 0
+        if self.index >= len(self.dead_image)-1:
+            self.dino_state = "idle"
+        self.image = self.dead_image[self.index]
+    
     
     def update(self):
-        self.run()
+        if self.dino_state == "idle":
+            self.idle_()
+        elif self.dino_state == "run":
+            self.run()
+        elif self.dino_state == "jump":
+            self.jump()
+        elif self.dino_state == "dead":
+            self.death()
+    
     
 dino = Dino()
 player_group = pygame.sprite.Group()
@@ -51,10 +123,18 @@ while runninStatus:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             runninStatus = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                dino.dino_state = "run"
+            if event.key == pygame.K_SPACE:
+                 dino.dino_state = "jump"
+            if event.key == pygame.K_d:
+                 dino.dino_state = "dead"
     # Scroll Logic -->
-    groundx -= groundSpeed
-    if groundx <= -102:
-        groundx = 0
+    if dino.dino_state != "idle":
+        groundx -= groundSpeed
+        if groundx <= -102:
+            groundx = 0
     
     screen.blit(bg,(0,0))
     screen.blit(ground_img,(groundx,h-150))
