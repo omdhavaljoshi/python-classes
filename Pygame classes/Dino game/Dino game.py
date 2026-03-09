@@ -17,6 +17,7 @@ screen  = pygame.display.set_mode((w,h))
 pygame.display.set_caption("Dino game")
 dinoY = h-210
 dinoX = 100
+ground = h-150
 
 # Sprites -->
 class Dino(pygame.sprite.Sprite):
@@ -33,9 +34,9 @@ class Dino(pygame.sprite.Sprite):
         self.counter = 0
         self.dino_state = "idle"
         self.dino_on_ground = True
-        self.dino_velociy_y = 0
-        self.dino_gravity = 1
-        self.jump_power = -5
+        self.dino_velocity_y = 0
+        self.gravity = 1
+        self.jump_power = -20
     
     def load_images(self):
         for i in range(1,9):
@@ -77,21 +78,26 @@ class Dino(pygame.sprite.Sprite):
         self.image = self.idle_image[self.index]
     
     def gravity_handle(self):
-        self.dino_velociy_y += self.dino_gravity
-        self.rect.y += self.dino_velociy_y
-        self.dino_on_ground == True
+        self.rect.y += self.dino_velocity_y 
+        self.dino_velocity_y += self.gravity 
+        if self.rect.y >= 510:
+            self.dino_state = "run"
+            self.dino_velocity_y = 0
+            self.rect.y = 510
+            self.dino_on_ground = True
+
+    def start_jump(self):
+        if self.dino_on_ground == True:
+            self.dino_on_ground = False
+            self.dino_velocity_y = self.jump_power
+            self.dino_state = "jump"
 
     def jump(self):
-        if self.dino_on_ground == True:
-            self.dino_velociy_y = self.jump_power
-            self.dino_on_ground = False
         self.track_counter()
-        if self.index > len(self.jump_image)-1:
+        if self.index >= len(self.jump_image):
             self.index = 0
-        if self.index >= len(self.jump_image)-1:
-            self.dino_state = "run"
         self.image = self.jump_image[self.index]
-        # self.rect.y += self.jump_power
+        self.gravity_handle()
     
     def death(self):
         self.track_counter()
@@ -127,9 +133,9 @@ while runninStatus:
             if event.key == pygame.K_p:
                 dino.dino_state = "run"
             if event.key == pygame.K_SPACE:
-                 dino.dino_state = "jump"
+                dino.start_jump()
             if event.key == pygame.K_d:
-                 dino.dino_state = "dead"
+                dino.dino_state = "dead"
     # Scroll Logic -->
     if dino.dino_state != "idle":
         groundx -= groundSpeed
