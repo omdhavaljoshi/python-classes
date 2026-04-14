@@ -1,8 +1,28 @@
 import pygame,random
+import sqlite3
 pygame.init()
 pygame.mixer.music.load(r"Pygame classes/Dino game/dino music.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
+
+connection = sqlite3.connect(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Coding/Python coding class/Pygame classes/Database concept/database.db")
+cursor = connection.cursor()
+
+# Creating the table -->
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS dino_game(
+               sn INTEGER PRIMARY KEY AUTOINCREMENT,
+               name TEXT,
+               user_id TEXT,
+               score INTEGER)
+""")
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS user_login_dinogame(
+               sn INTEGER PRIMARY KEY AUTOINCREMENT,
+               name TEXT,
+               user_id TEXT,
+               password TEXT)
+""")
 
 # Background Images -->
 bg = pygame.image.load(r"Pygame classes/Class 1/bg (1).png")
@@ -26,7 +46,9 @@ spawn_obstacle = pygame.USEREVENT + 1
 pygame.time.set_timer(spawn_obstacle,1500)
 score = 0
 score_font = pygame.font.Font(None,30)
-
+LOGINSCREEN = "login screen"
+current_screen = LOGINSCREEN
+current_user = ""
 # Sprites -->
 class Dino(pygame.sprite.Sprite):
     def __init__(self):
@@ -44,7 +66,7 @@ class Dino(pygame.sprite.Sprite):
         self.dino_on_ground = True
         self.dino_velocity_y = 0
         self.gravity = 1
-        self.jump_power = -25
+        self.jump_power = -20
     
     def load_images(self):
         for i in range(1,9):
@@ -114,8 +136,7 @@ class Dino(pygame.sprite.Sprite):
         if self.index >= len(self.dead_image)-1:
             self.dino_state = "idle"
         self.image = self.dead_image[self.index]
-    
-    
+       
     def update(self):
         if self.dino_state == "idle":
             self.idle_()
@@ -136,15 +157,80 @@ class Obstacles(pygame.sprite.Sprite):
 
     def move_left(self):
         global score
-        self.rect.x -= self.speed
-        if self.rect.right< dino.rect.left:
-            self.kill()
-            score +=1
+        if dino.dino_on_ground == True:
+            self.rect.x -= self.speed
+            if self.rect.right< dino.rect.left:
+                self.kill()
+                score +=1
+        else:
+            self.rect.x -= self.speed+0.7
+            if self.rect.right< dino.rect.left:
+                self.kill()
+                score +=1
 
     def update(self):
         if game_on_pause == False:
             self.move_left()
-    
+
+def create_account():
+        name = input("What is your name: ")
+        cursor.execute("""SELECT user_id FROM user_login_dinogame""")
+        user_ids = cursor.fetchall()
+        while True:
+            user_id = input("Select a user_id: ")
+            print(user_ids)
+            if user_id in user_ids[0]:
+                print("Make a unique user id.")
+            else:
+                password = input("Choose a password: ")
+                cursor.execute("""INSERT INTO user_login_dinogame(name,user_id,password) VALUES(?,?,?)""",(name,user_id,password))
+                connection.commit()
+                print("Account successfully created")
+                cursor.execute("""INSERT INTO dino_game(name,user_id,score) VALUES(?,?,?)""", (name,user_id,0))
+                authenticate()
+                break
+
+def sign_in():
+    global current_screen, current_user
+    user_name = input("What is your user id: ")
+    password = input("What is your password: ")
+    cursor.execute("""SELECT user_id,password FROM user_login_dinogame WHERE user_id = ? AND password = ?""", (user_name,password))
+    login_data = cursor.fetchall()
+    if len(login_data) > 0:
+        print("Successfully loged in.")
+        current_screen = "loged_in"
+        current_user = user_name
+        return
+    else:
+        print("Password or User id incorrect")
+        # authenticate()
+
+def authenticate():
+    print("""
+    1. Create Account
+    2. Sign in
+    3. Exit
+""")
+    choice = input("Select a option: ")
+    if choice == '1':
+        create_account()
+    elif choice == '2':
+        sign_in()
+    elif choice =='3':
+        return
+
+def save_score(current_user):
+    cursor.execute("""SELECT score FROM dino_game WHERE user_id = ?""", (current_user,))
+    current_score = cursor.fetchall()
+    if score > current_score[0][0]:
+        cursor.execute("""UPDATE dino_game SET score = ? WHERE user_id = ?""", (score,current_user))
+        connection.commit()
+        print("Score updated")
+        print(current_score[0][0])
+        cursor.execute("""SELECT score FROM dino_game WHERE user_id = ?""", (current_user,))
+        updated_score = cursor.fetchall()
+        print(updated_score[0][0])
+        
 dino = Dino()
 player_group = pygame.sprite.Group()
 obstacle_group = pygame.sprite.Group()
@@ -163,22 +249,34 @@ while runninStatus:
             if event.key == pygame.K_SPACE:
                 dino.start_jump()
                 game_on_pause = False
-            if event.key == pygame.K_d:
-                dino.dino_state = "dead"
-                game_on_pause = True
+            # if event.key == pygame.K_d:
+            #     dino.dino_state = "dead"
+            #     game_on_pause = True
         if event.type == spawn_obstacle and game_on_pause == False:
             obstacle_group.add(Obstacles())
+            
+    if current_screen == LOGINSCREEN:
+        authenticate()
+        print("test")
 
+    # if current_screen == "loged_in":
+    #     # continue
     # Collision -->
     if pygame.sprite.spritecollide(dino,obstacle_group,False,pygame.sprite.collide_mask):
         game_on_pause = True
         dino.dino_state = "dead"
+        save_score(current_user)
 
     # Scroll Logic -->
     if game_on_pause == False:
-        groundx -= groundSpeed
-        if groundx <= -102:
-            groundx = 0
+        if dino.dino_on_ground == True:
+            groundx -= groundSpeed
+            if groundx <= -102:
+                groundx = 0
+        else:
+            groundx -= groundSpeed+0.7
+            if groundx <= -102:
+                groundx = 0
     
     screen.blit(bg,(0,0))
     screen.blit(ground_img,(groundx,h-150))
@@ -186,7 +284,7 @@ while runninStatus:
     player_group.update()
     obstacle_group.draw(screen)
     obstacle_group.update()
-    score_text = score_font.render(f"score : {score}",False,"RED","WHITE")
+    score_text = score_font.render(f"Score : {score}",False,"BLACK")
     screen.blit(score_text,(10,10))
 
     pygame.display.update()
