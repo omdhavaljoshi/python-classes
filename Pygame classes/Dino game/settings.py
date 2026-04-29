@@ -18,7 +18,6 @@ game_on_pause = True
 spawn_obstacle = pygame.USEREVENT + 1
 pygame.time.set_timer(spawn_obstacle,1500)
 score = 0
-score_font = pygame.font.Font(None,30)
 LOGINSCREEN = "login screen"
 current_screen = LOGINSCREEN
 current_user = ""

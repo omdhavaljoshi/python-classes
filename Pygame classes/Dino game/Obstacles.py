@@ -1,5 +1,5 @@
 import pygame,random
-from Dino_game import obstacle_list, obstacle_x, obstacle_y, dino, game_on_pause
+from settings import obstacle_list, obstacle_x, obstacle_y, game_on_pause
 
 class Obstacles(pygame.sprite.Sprite):
     def __init__(self):
@@ -9,7 +9,7 @@ class Obstacles(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = (obstacle_x,obstacle_y))
         self.speed = 4
 
-    def move_left(self):
+    def move_left(self,dino):
         global score
         if dino.dino_on_ground == True:
             self.rect.x -= self.speed
@@ -22,6 +22,6 @@ class Obstacles(pygame.sprite.Sprite):
                 self.kill()
                 score +=1
 
-    def update(self):
+    def update(self,dino):
         if game_on_pause == False:
-            self.move_left()
+            self.move_left(dino)

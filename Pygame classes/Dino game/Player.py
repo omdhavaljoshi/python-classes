@@ -1,5 +1,5 @@
 import pygame
-from Dino_game import dinoX,dinoY
+from settings import dinoX,dinoY
 
 class Dino(pygame.sprite.Sprite):
 

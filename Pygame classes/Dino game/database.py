@@ -1,5 +1,5 @@
 import sqlite3
-from Dino_game import score
+from settings import score
 
 connection = sqlite3.connect(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Coding/Python coding class/Pygame classes/Database concept/database.db")
 cursor = connection.cursor()

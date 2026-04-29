@@ -1,4 +1,4 @@
-from Dino_game import cursor,connection
+from database import cursor,connection
 
 def create_account():
         name = input("What is your name: ")

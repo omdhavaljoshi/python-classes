@@ -4,7 +4,9 @@ from settings import *
 from Authentication import *
 from Obstacles import *
 from database import *
+pygame.init()
 
+score_font = pygame.font.Font(None,30)
 bg = pygame.image.load(r"Pygame classes/Class 1/bg (1).png")
 ground_img = pygame.image.load(r"Pygame classes/Dino game/ground.png")
 dino = Dino()
@@ -63,6 +65,6 @@ while runninStatus:
     score_text = score_font.render(f"Score : {score}",False,"BLACK")
     screen.blit(score_text,(10,10))
 
-    pygame.display.update()
+    pygame.display.update(dino)
 
 pygame.quit()
