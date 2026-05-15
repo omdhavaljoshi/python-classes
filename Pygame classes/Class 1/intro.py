@@ -52,7 +52,7 @@ while running:
                 speedX -= 2
                 speedY -= 2
             elif event.key == pygame.K_LEFT:
-                posX -= 2
+                posX -= 2 
             elif event.key == pygame.K_RIGHT:
                 posX += 2
     posX += speedX

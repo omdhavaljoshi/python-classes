@@ -6,7 +6,6 @@ h,w = 800,800
 clock = pygame.time.Clock()
 groundx = 0
 groundSpeed = 4
-screen  = pygame.display.set_mode((w,h))
 pygame.display.set_caption("Dino game")
 dinoY = h-210
 dinoX = 100
@@ -16,8 +15,8 @@ obstacle_x = w-10
 obstacle_y = ground-50
 game_on_pause = True
 spawn_obstacle = pygame.USEREVENT + 1
-pygame.time.set_timer(spawn_obstacle,1500)
 score = 0
 LOGINSCREEN = "login screen"
 current_screen = LOGINSCREEN
 current_user = ""
+dino = None
