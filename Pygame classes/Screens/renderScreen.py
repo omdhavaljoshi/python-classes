@@ -2,16 +2,23 @@ import pygame
 import settings as s
 
 def setScreenLogic(mousePos):
-    if s.gameButton.collidepoint(mousePos):
-        print("test")
-        s.current_screen = s.GAME
-        print(s.current_screen)
-    if s.quitButton.collidepoint(mousePos):
-        s.running = False
-    if s.game_menuButton.collidepoint(mousePos):
-        s.current_screen = s.MENU
-    if s.game_overButton.collidepoint(mousePos):
-        s.current_screen = s.GAME_OVER
+    if s.current_screen == s.MENU:
+        if s.gameButton.collidepoint(mousePos):
+            print("test")
+            s.current_screen = s.GAME
+            print(s.current_screen)
+        if s.quitButton.collidepoint(mousePos):
+            s.running = False
+    elif s.current_screen == s.GAME:
+        if s.game_menuButton.collidepoint(mousePos):
+            s.current_screen = s.MENU
+        if s.game_overButton.collidepoint(mousePos):
+            s.current_screen = s.GAME_OVER
+    elif s.current_screen == s.GAME_OVER:
+        if s.game_menuButton.collidepoint(mousePos):
+            s.current_screen = s.MENU
+        if s.quitButton.collidepoint(mousePos):
+            s.running = False
 
 def draw_button(text,rectButton):
     pygame.draw.rect(s.screen,s.button_colour,rectButton)

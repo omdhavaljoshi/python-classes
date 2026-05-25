@@ -1,33 +1,33 @@
-from database import cursor,connection
+import database as d
 import settings as s
 
 def create_account():
         name = input("What is your name: ")
-        cursor.execute("""SELECT user_id FROM user_login_dinogame""")
-        user_ids = cursor.fetchall()
+        d.cursor.execute("""SELECT user_id FROM user_login_dinogame""")
+        user_ids = d.cursor.fetchall()
         while True:
             user_id = input("Select a user_id: ")
             print(user_ids)
             if user_id in user_ids[0]:
-                print("Make a unique user id.")
+                print("Make a unique user id.") 
             else:
                 password = input("Choose a password: ")
-                cursor.execute("""INSERT INTO user_login_dinogame(name,user_id,password) VALUES(?,?,?)""",(name,user_id,password))
+                d.cursor.execute("""INSERT INTO user_login_dinogame(name,user_id,password) VALUES(?,?,?)""",(name,user_id,password))
                 print("Account successfully created")
-                cursor.execute("""INSERT INTO dino_game(name,user_id,score) VALUES(?,?,?)""", (name,user_id,0))
+                d.cursor.execute("""INSERT INTO dino_game(name,user_id,score) VALUES(?,?,?)""", (name,user_id,0))
                 authenticate()
-                connection.commit()
+                d.connection.commit()
                 break
 
 def sign_in():
     # global s.current_screen, s.current_user
     user_name = input("What is your user id: ")
     password = input("What is your password: ")
-    cursor.execute("""SELECT user_id,password FROM user_login_dinogame WHERE user_id = ? AND password = ?""", (user_name,password))
-    login_data = cursor.fetchall()
+    d.cursor.execute("""SELECT user_id,password FROM user_login_dinogame WHERE user_id = ? AND password = ?""", (user_name,password))
+    login_data = d.cursor.fetchall()
     if len(login_data) > 0:
         print("Successfully loged in.")
-        s.current_screen = "loged_in"
+        s.current_screen = s.MENUSCREEN
         s.current_user = user_name
         return
     else:

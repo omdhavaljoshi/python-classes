@@ -1,7 +1,7 @@
 import sqlite3
 import settings as s
 
-connection = sqlite3.connect(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Coding/Python coding class/Pygame classes/Database concept/database.db")
+connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 
 # Creating the table -->
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS dino_game(
 """)
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS user_login_dinogame(
-               sn INTEGER PRIMARY KEY AUTOINCREMENT,
+               sn INTEGER PRIMARY KEY AUTOINCREMENT, 
                name TEXT,
                user_id TEXT,
                password TEXT)

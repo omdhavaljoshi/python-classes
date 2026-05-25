@@ -1,5 +1,5 @@
 import pygame
-from settings import dinoX,dinoY
+import settings as s
 
 class Dino(pygame.sprite.Sprite):
 
@@ -12,7 +12,7 @@ class Dino(pygame.sprite.Sprite):
         self.load_images()
         self.index = 0
         self.image = self.idle_image[0]
-        self.rect = self.image.get_rect(center = (dinoX,dinoY))
+        self.rect = self.image.get_rect(center = (s.dinoX,s.dinoY))
         self.counter = 0
         self.dino_state = "idle"
         self.dino_on_ground = True
@@ -22,7 +22,7 @@ class Dino(pygame.sprite.Sprite):
     
     def load_images(self):
         for i in range(1,9):
-            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Run "+f"({i}).png")
+            self.image = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Python coding class/Pygame classes/Dino game/Dino Images/Run "+f"({i}).png")
             self.image = pygame.transform.scale(self.image,(160,160))
             self.run_image.append(self.image)
 
@@ -70,7 +70,7 @@ class Dino(pygame.sprite.Sprite):
 
     def start_jump(self):
         if self.dino_on_ground == True:
-            self.dino_on_ground = False
+            self.dino_on_ground = False 
             self.dino_velocity_y = self.jump_power
             self.dino_state = "jump"
 

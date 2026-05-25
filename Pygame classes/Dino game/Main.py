@@ -1,22 +1,23 @@
 import pygame
 pygame.init()
-from Player import Dino
+import Player as p
 import settings as s
-from Authentication import *
-from Obstacles import *
-from database import *
-pygame.mixer.music.load(r"Pygame classes/Dino game/dino music.mp3")
-pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.5)
+import Authentication as Auth
+import Obstacles as o
+import database as d
+import render_screen as r
+# pygame.mixer.music.load(r"Pygame classes/Dino game/dino music.mp3")
+# pygame.mixer.music.play(-1)
+# pygame.mixer.music.set_volume(0.5)
 
 score_font = pygame.font.Font(None,30)
-bg = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Coding/Python coding class/Pygame classes/Class 1/bg (1).png")
-ground_img = pygame.image.load(r"Pygame classes/Dino game/ground.png")
-s.dino = Dino()
+bg = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Python coding class/Pygame classes/Dino game/bg (1).png")
+ground_img = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Python coding class/Pygame classes/Dino game/ground.png")
+s.dino = p.Dino()
 player_group = pygame.sprite.Group()
 obstacle_group = pygame.sprite.Group()
 player_group.add(s.dino)
-screen  = pygame.display.set_mode((s.w,s.h))
+s.screen  = pygame.display.set_mode((s.w,s.h))
 pygame.time.set_timer(s.spawn_obstacle,1500)
 
 runninStatus = True
@@ -35,11 +36,16 @@ while runninStatus:
             # if event.key == pygame.K_d:
             #     dino.dino_state = "dead"
             #     game_on_pause = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
         if event.type == s.spawn_obstacle and s.game_on_pause == False:
-            obstacle_group.add(Obstacles())
+            obstacle_group.add(o.Obstacles())
             
-    if s.current_screen == s.LOGINSCREEN:
-        authenticate()
+    if s.current_screen == s.AUTHSCREEN:
+        # authenticate()
+        r.draw_button("Login",s.login_button)
+        r.draw_button("Sign Up", s.signup_button)
+        s.screen.fill("Green")
         print(s.current_screen,"*****")
 
     # if current_screen == "loged_in":
@@ -48,7 +54,7 @@ while runninStatus:
     if pygame.sprite.spritecollide(s.dino,obstacle_group,False,pygame.sprite.collide_mask):
         s.game_on_pause = True
         s.dino.dino_state = "dead"
-        save_score(s.current_user)
+        d.save_score(s.current_user)
 
     # Scroll Logic -->
     if s.game_on_pause == False:
@@ -59,16 +65,16 @@ while runninStatus:
         else:
             s.groundx -= s.groundSpeed+0.7
             if s.groundx <= -102:
-                s.groundx = 0
+                s.groundx = 0 
     
-    screen.blit(bg,(0,0))
-    screen.blit(ground_img,(s.groundx,s.h-150))
-    player_group.draw(screen)
+    s.screen.blit(bg,(0,0))
+    s.screen.blit(ground_img,(s.groundx,s.h-150))
+    player_group.draw(s.screen)
     player_group.update()
-    obstacle_group.draw(screen)
+    obstacle_group.draw(s.screen)
     obstacle_group.update()
     score_text = score_font.render(f"Score : {s.score}",False,"BLACK")
-    screen.blit(score_text,(10,10))
+    s.screen.blit(score_text,(10,10))
 
     pygame.display.update()
 

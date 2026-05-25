@@ -15,7 +15,7 @@ class Obstacles(pygame.sprite.Sprite):
             self.rect.x -= self.speed
             if self.rect.right< dino.rect.left:
                 self.kill()
-                s.score +=1
+                s.score +=1 
         else:
             self.rect.x -= self.speed+0.7
             if self.rect.right< dino.rect.left:
