@@ -22,13 +22,14 @@ CREATE TABLE IF NOT EXISTS user_login_dinogame(
 
 def save_score(current_user):
     cursor.execute("""SELECT score FROM dino_game WHERE user_id = ?""", (current_user,))
-    current_score = cursor.fetchall()
+    # current_score = cursor.fetchall()
+    current_score = cursor.fetchone()
     print(current_score)
-    if s.score > current_score[0][0] and len(current_score) >= 1:
-        cursor.execute("""UPDATE dino_game SET score = ? WHERE user_id = ?""", (s.score,current_user))
-        print("Score updated")
-        print(current_score[0][0])
-        cursor.execute("""SELECT score FROM dino_game WHERE user_id = ?""", (current_user,))
-        updated_score = cursor.fetchall()
-        print(updated_score[0][0])
+    # if s.score > current_score[0][0] and len(current_score) >= 1:
+        # cursor.execute("""UPDATE dino_game SET score = ? WHERE user_id = ?""", (s.score,current_user))
+        # print("Score updated")
+        # print(current_score[0][0])
+        # cursor.execute("""SELECT score FROM dino_game WHERE user_id = ?""", (current_user,))
+        # updated_score = cursor.fetchall()
+        # print(updated_score[0][0])
     connection.commit()

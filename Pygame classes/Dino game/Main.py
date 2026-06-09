@@ -6,13 +6,15 @@ import Authentication as Auth
 import Obstacles as o
 import database as d
 import render_screen as r
+import os
 # pygame.mixer.music.load(r"Pygame classes/Dino game/dino music.mp3")
 # pygame.mixer.music.play(-1)
 # pygame.mixer.music.set_volume(0.5)
 
+DIR = os.path.dirname(__file__)
 score_font = pygame.font.Font(None,30)
-bg = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Python coding class/Pygame classes/Dino game/bg (1).png")
-ground_img = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Python coding class/Pygame classes/Dino game/ground.png")
+bg = pygame.image.load(os.path.join(DIR,r"image assets/bg (1).png"))
+ground_img = pygame.image.load(os.path.join(DIR,r"image assets/ground.png"))
 s.dino = p.Dino()
 player_group = pygame.sprite.Group()
 obstacle_group = pygame.sprite.Group()
@@ -23,6 +25,7 @@ pygame.time.set_timer(s.spawn_obstacle,1500)
 runninStatus = True
 while runninStatus:
     s.clock.tick(60)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             runninStatus = False

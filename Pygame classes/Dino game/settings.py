@@ -1,7 +1,12 @@
 import pygame
+# pygame.init()
+import os
 
-background_path = r"Pygame classes/Class 1/bg (1).png"
-ground_img_path = r"Pygame classes/Dino game/ground.png"
+DIR = os.path.dirname(__file__)
+# print(DIR)
+background_path = os.path.join(DIR, r"Dino game/image assets/bg (1).png")
+print(background_path)
+ground_img_path = os.path.join(DIR,r"Pygame classes/Dino game/ground.png")
 h,w = 800,800
 clock = pygame.time.Clock()
 groundx = 0
@@ -10,7 +15,7 @@ pygame.display.set_caption("Dino game")
 dinoY = h-210
 dinoX = 100
 ground = h-150
-obstacle_list = [r"Pygame classes/Dino game/cactus.png", r"Pygame classes/Dino game/spikes.png"]
+obstacle_list = [os.path.join(DIR,r"image assets/cactus.png"), os.path.join(DIR,r"image assets/spikes.png")]
 obstacle_x = w-10
 obstacle_y = ground-50
 game_on_pause = True

@@ -1,5 +1,7 @@
 import pygame
 import settings as s
+import os
+DIR = os.path.dirname(__file__)
 
 class Dino(pygame.sprite.Sprite):
 
@@ -22,22 +24,22 @@ class Dino(pygame.sprite.Sprite):
     
     def load_images(self):
         for i in range(1,9):
-            self.image = pygame.image.load(r"/Users/omjoshi/Library/CloudStorage/OneDrive-Personal/Python coding class/Pygame classes/Dino game/Dino Images/Run "+f"({i}).png")
+            self.image = pygame.image.load(os.path.join(DIR,r"image assets/Dino Images/Run "+f"({i}).png"))
             self.image = pygame.transform.scale(self.image,(160,160))
             self.run_image.append(self.image)
 
         for i in range(1,11):
-            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Idle "+f"({i}).png")
+            self.image = pygame.image.load(os.path.join(DIR,r"image assets/Dino Images/Idle "+f"({i}).png"))
             self.image = pygame.transform.scale(self.image,(160,160))
             self.idle_image.append(self.image)
 
         for i in range(1,13):
-            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Jump "+f"({i}).png")
+            self.image = pygame.image.load(os.path.join(DIR,r"image assets/Dino Images/Jump "+f"({i}).png"))
             self.image = pygame.transform.scale(self.image,(160,160))
             self.jump_image.append(self.image)
         
         for i in range(1,9):
-            self.image = pygame.image.load(r"Pygame classes/Dino game/Dino Images/Dead "+f"({i}).png")
+            self.image = pygame.image.load(os.path.join(DIR,r"image assets/Dino Images/Dead "+f"({i}).png"))
             self.image = pygame.transform.scale(self.image,(160,160))
             self.dead_image.append(self.image)
     
